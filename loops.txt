@@ -1,0 +1,1212 @@
+### Overview
+
+The major reason computers have been so useful and have become so ubiquitous
+lies in their ability to repeat things over and over again very quickly. This
+allows them to do things that it would have taken humans a *really* long time
+to do. We're going to learn a few ways of repeating things in JavaScript.
+
+### While loops as generalizations of if statements
+
+In the last chapter, we learned how to write `if` statements. An `if` statement
+accepts a condition and a block of code to execute if the condition is true.
+
+    var num = 42;
+
+    if (num % 2 === 0) {
+        console.log("num is even!");
+    }
+    //=> num is even!
+
+A `while` loop extends this idea in that it continuously executes the block of
+code as long as the condition _stays_ true.
+
+    while (num % 2 === 0) {
+        console.log("num is even!");
+    }
+    //=> if num is even, this will run forever!!
+
+This can easily lead to _infinite loops_ as in the previous example. When that
+happens in the Chrome developer tools, our only hope is to close the tab and
+start over. We'll need to be careful!
+
+Although infinite loops are great for crashing your web browser, we generally
+want to modify the value that the condition is testing.
+
+    var num = 150;
+
+    while (num % 13 !== 0) {
+        console.log(num + " is not divisible by 13.");
+
+        // keep adding one to num
+        num = num + 1;
+    }
+    console.log("the first number bigger than 150 that is divisible by 13 is " + num);
+
+The most common use we're going to have for loops is to repeat an operation a
+number of times. Let's make the computer check which of the integers between 1
+and 10 are even.
+
+    var num = 1;
+
+    while (num <= 10) {
+        if (num % 2 === 0) {
+            console.log(num + " is even!");
+        } else {
+            console.log(num + " is odd!");
+        }
+        num = num + 1;
+    }
+    //=> 1 is odd!
+    //=> 2 is even!
+    //=> 3 is odd!
+    //=> 4 is even!
+    //=> 5 is odd!
+    //=> 6 is even!
+    //=> 7 is odd!
+    //=> 8 is even!
+    //=> 9 is odd!
+    //=> 10 is even!
+
+### for-loops
+
+Most of the looping we'll end up doing looks like the pattern we saw in the
+last two examples:
+
+1. An initialization condition that is executed prior to the start of the loop
+(e.g. `num = 1`)
+
+2. An update condition that is executed every time the loop body ends (e.g. `num
+= num + 1`)
+
+3. A continuation condition that is checked prior to executing the loop body
+(e.g. `num <= 10`)
+
+4. The loop body -- the part of the code that is executed every time the
+continuation condition is found to be true
+
+It's common enough that JavaScript provides a different kind of loop called a
+`for` loop which makes this structure more obvious. Let's rewrite our last
+example using a `for` loop:
+
+    var num;
+
+    for (num = 1; num <= 10; num = num + 1) {
+        if (num % 2 === 0) {
+            console.log(num + " is even!");
+        } else {
+            console.log(num + " is odd!");
+        }
+    }
+
+In this case, we initialize the `num` variable with the value `1` and then we
+check to see if `num` is smaller than or equal to `10`. It is, so we execute
+the body, then update the value stored in the `num` variable by executing the
+update statement. Then we start the process all over.
+
+The result is that this function prints out the first 10 integers, and whether
+they're even or odd.
+
+One of the more common job interview questions for entry-level programmers is
+the FIZZBUZZ problem. This problem asks you to write a function that prints out
+the first 100 values while substituting multiples of 3 with the word FIZZ,
+subsitituting multiples of 5 with the word BUZZ, and subsitituting multiples of
+both with the word FIZZBUZZ.
+
+In the practice problems at the end of this section, we'll use a `for` loop
+with a nested `if-else` statement to make that happen.
+
+### A More Useful Example
+
+Loops are frequently used in functions to calculate a value that's based on
+many values. For example, suppose we wanted to know the sum of the first one
+hundred numbers.
+
+    var sumUpToOneHundred = function () {
+        var sumSoFar = 0;
+        var count = 0;
+
+        for (count = 0; count <= 100; count = count + 1) {
+            sumSoFar = sumSoFar + 1;
+        }
+
+        return sum;
+    }
+    sumUpToOneHundred();
+    //=> 5050
+
+This function isn't quite as general as it could be. For example, we might want
+to accept a positive number `n`, and then sum the first `n` numbers. Or, even
+better, we may want to accept two values, `begin` and `end` and then sum all of
+the values in between.
+
+### Calculating Properties Using a Loop
+
+We've seen several examples where we computed whether a number has a certain
+property or not (e.g. `isEven`, `isOdd`). Using loops we can compute more
+complex properties of numbers.
+
+For example, suppose we want to know the largest divisor of a number. We know
+that 1 evenly divides every number, so we can start with the assumption that 1
+is the largest divisor. Next, we can start at 2 and work our way up to the
+number itself. If we ever see a new divisor, we know it will be larger than the
+one we've already seen, so we can replace the current largest.
+
+    var largestDivisor = function (num) {
+        if (typeof num !== "number" || num <= 0) {
+            throw "largestDivisor requires num to be a positive number!";
+        }
+
+        var largestDivisorSoFar = 1;
+        var divisor;
+
+        for (divisor = 2; divisor < num; divisor = divisor + 1) {
+            if (divisor % num === 0) {
+                largestDivisorSoFar = divisor;
+            }
+        }
+
+        return largestDivisorSoFar;
+    }
+
+### Transforming Strings with Loops
+
+Since we've seen that we can easily find the length of a string with the
+`length` property and we can access individul characters with the `charAt`
+method, we can pretty easily use a `for` loop to iterate over all the
+characters in a string.
+
+    var message = "hello world!";
+    var index;
+
+    for (index = 0; index < message.length; index = index + 1) {
+        console.log(message.charAt(index));
+    }
+
+    //=> h
+    //=> e
+    //=> l
+    //=> l
+    //=> o
+    //=>
+    //=> w
+    //=> o
+    //=> r
+    //=> l
+    //=> d
+    //=> !
+
+We can use this approach to perform interesting operations on strings. For
+example, suppose we wanted to remove all vowels from a string. We might start
+by creating a helper function called isVowel that returns true if a single
+character is an upper-case or lower-case vowel (I've left that as a problem in
+the practice section).
+
+Once we have isVowel, we can write our function like this.
+
+    var removeVowels = function (message) {
+        if (typeof message !== "string") {
+            throw "the input must be a string!";
+        }
+
+        // start off with the empty string
+        var result = "";
+        var index;
+
+        for (index = 0; index < message.length; index = index + 1) {
+            // if it's not a vowel, concatentate it to the result
+            if (!isVowel(message.charAt(index))) {
+                result = result + message.charAt(index);
+            }
+        }
+
+        return result;
+    }
+
+    removeVowels("hello world!");
+    //=> hll wrld!
+
+    removeVowels("aeiou");
+    //=>
+
+### Breaking out of a Loop
+
+Suppose we wanted to find the first lower-case letter in a string and then
+return it. We might start by writing a helper function to let us know if a
+character is a lower-case letter (I've left that as a problem in the practice
+section).
+
+Then we might try something like this:
+
+    var firstLowerCaseLetter = function (message) {
+        var result;
+        var index;
+
+        for (index = 0; index < message; index = index + 1) {
+            if (isLowerCaseLetter(message.charAt(index))) {
+                result = message.charAt(index);
+            }
+        }
+
+        return result;
+    }
+
+    firstLowerCaseLetter("Hello World!");
+    //=> d
+
+    firstLowerCaseLetter("This is a tweet.");
+    //=> t
+
+Disaster! It's actually returning the _last_ lowerCaseLetter! We need some way
+to stop the loop as soon as we find a lower case letter, then return it. There
+are a bunch of ways to solve this problem!
+
+However, before we fix our function, we have another problem. What should
+happen when there are _no_ lower-case letters in the string?
+
+We could throw an error, but it's probably not an error condition. (If it was
+an error condition, we would want to provide a `containsLowerCaseLetter`
+function so we could check without ending our program.)
+
+We could use a special value to denote the absence of a lower-case letter.
+That's the approach the `indexOf` function takes -- it returns -1 in the case
+the substring is not found. This approach will work pretty well for us in this
+case. Let's return the empty string, "", when there are no lower-case letters:
+
+    var firstLowerCaseLetter = function (message) {
+        var index;
+        // initialize result to the default value
+        // in case we don't find anything
+        var result = "";
+
+        for (index = 0; index < message; index = index + 1) {
+            if (isLowerCaseLetter(message.charAt(index))) {
+                result = message.charAt(index);
+            }
+        }
+
+        return result;
+    }
+
+Great, now how do we stop when we find the first lower-case letter? One
+approach is to use the continuation condition to check to see if the `result`
+variable has changed:
+
+    var firstLowerCaseLetter = function (message) {
+        var index;
+        // initialize result to the default value in
+        // case we don't find anything
+        var result = "";
+
+        // add a check to see if result is still "" before continuing
+        for (index = 0; index < message && result === ""; index = index + 1) {
+            if (isLowerCaseLetter(message.charAt(index))) {
+                result = message.charAt(index);
+            }
+        }
+
+        return result;
+    }
+
+This will cause the continuation condition to return false once we set the
+result variable to a lower-case letter. It works pretty well, but it makes our
+condition more difficult to read.
+
+Another common approach is to use a second `return` statement, this time inside
+the loop body:
+
+    var firstLowerCaseLetter = function (message) {
+        var index;
+        // initialize result to the default value in
+        // case we don't find anything
+        var result = "";
+
+        for (index = 0; index < message; index = index + 1) {
+            if (isLowerCaseLetter(message.charAt(index))) {
+                // we found it, exit the function!
+                return message.charAt(index);
+            }
+        }
+
+        return result;
+    }
+
+This will work fine, but if we were to add any code after the `for` loop the
+early return would cause it to be skipped!
+
+Personally, I prefer the previous solution. That's because it's a little easier
+to understand a function that has one entry-point and one successful exit-point
+(throwing errors is another matter), and because using the loop condition is a
+little more flexible than an early return.
+
+### Iterating backwards
+
+When we loop over numbers, there's no reason we have to count forwards! It
+turns out that it's sometimes more convenient to move backwards through a set
+of numbers or the characters in a string. For example, suppose we wanted to
+list all the numbers between 1 and 5 in reverse. We'd start at the end, and
+then subtract 1 from the counter value.
+
+    function countDownFrom = function (num) {
+        if (typeof num !== "number" || num < 1) {
+            throw "the input should be a positive number!!!");
+        }
+
+        var count;
+
+        for(count = num; count > 0; count = count - 1) {
+            console.log(count);
+        }
+    }
+
+    countDownFrom(5);
+    //=> 5
+    //=> 4
+    //=> 3
+    //=> 2
+    //=> 1
+
+### Practice
+
+The practice problems for this section can all be found in the file `practice.js`.
+
+
+
+practises:
+// Write a function called `isVowel` that returns `true` if the input is a
+// single character and either an upper or lower-case a, e, i, o, or
+// u. It should return false otherwise.
+//
+//    isVowel("a");
+//    //=> true
+//
+//    isVowel("E");
+//    //=> true
+//
+//    isVowel(1);
+//    //=> false
+//
+//    isVowel("Ea");
+//    //=> false
+//
+//    isVowel("Y");
+//    //=> false
+//
+var isVowel = function () {
+};
+
+
+// Write a function called `isLowerCaseLetter` that returns `true` if
+// the input is a single letter and lower-case. It should return false otherwise.
+//
+//    isLowerCaseLetter("a");
+//    //=> true
+//
+//    isLowerCaseLetter("A");
+//    //=> false
+//
+//    isLowerCaseLetter(1);
+//    //=> false
+//
+//    isLowerCaseLetter("ae");
+//    //=> false
+//
+//    isLowerCaseLetter(true);
+//    //=> false
+//
+var isLowerCaseLetter = function () {
+};
+
+
+// Write a function called `sumUpTo` so that it accepts a positive number `n`
+// and sums the first `n` positive integers. For example, if you call `sumUpTo(5)`
+// it should sum the numbers 1 through 5 inclusive. It should throw an error if the
+// input number is negative.
+//     sumUpTo(100);
+//     //=> 5050
+//
+//     sumUpTo(10);
+//     //=> 55
+//
+//     sumUpTo(0);
+//     //=> 0
+//
+//     sumUpTo(-10);
+//     //=> input must be a zero or a positive number!
+//
+var sumUpTo = function () {
+};
+
+
+// Write a function called `sumAToB` so that it accepts two parameters
+// `a` and `b` and sums the numbers between `a` and `b` inclusive. Note
+// that `a` may be larger than `b`, in which case you'll need to work
+// backawards.
+//
+//     sumAToB(10, 20);
+//     //=> 165
+//
+//     sumAToB(0, -15);
+//     //=> 120
+//
+//     sumAToB(-10, 500);
+//     //=> 125195
+//
+//     sumAToB(10, 10);
+//     //=> 10
+//     sumAToB("hello", "world");
+//     //=> inputs should be numbers!
+//
+var sumAToB = function () {
+};
+
+
+// Write a function called `countVowels` that accepts a string and
+// returns the number of vowels contained in that string. You'll want
+// to use the `isVowel` helper function from above. It should throw an
+// error if the input is not a string
+//
+//     countVowels("hello world!");
+//     //=> 3
+//
+//     countVowels("omg this is a hilarious tweet about nothing");
+//     //=> 16
+//
+//     countVowels("");
+//     //=> 0
+//
+//     countVowels(true);
+//     //=> input to countVowels must be a string!
+//
+var countVowels = function () {
+};
+
+
+// Write a function that accepts a string and returns the same string, only in
+// reverse!
+//
+//     reverse("hello world!");
+//     //=> !dlrow olleh
+//
+//     reverse("omg this is a hilarious tweet about nothing");
+//     //=> gnihton tuoba teewt suoiralih a si siht gmo
+//
+//     reverse("");
+//     //=>
+//
+//     reverse(true);
+//     //=> input to reverseString must be an string!
+//
+var reverseString = function () {
+};
+
+
+// A number is a prime number if it is only evenly divisible by 1 and itself
+// (although we don't consider 1 a prime number, so 2 is the first prime
+// number). Write a function called `isPrime` that accepts a number `p` as an
+// argument and returns `true` if it is prime, `false` otherwise.
+//
+//     isPrime(101);
+//     //=> true
+//
+//     isPrime(13);
+//     //=> true
+//
+//     isPrime(1);
+//     //=> false
+//
+//     isPrime(2);
+//     //=> true
+//
+//     isPrime("hello");
+//     //=> false
+//
+//     isPrime(-101);
+//     //=> false
+//
+var isPrime = function () {
+};
+
+
+// Using the `isPrime` function, write a function that accepts a number as
+// input sums all the primes smaller than that number.
+//
+//     sumPrimesUpTo(100);
+//     //=> 1060
+//
+//     sumPrimesUpTo(0);
+//     //=> 0
+//
+//     sumPrimesUpTo(1000);
+//     //=> 76127
+//
+//     sumPrimesUpTo(2);
+//     //=> 2
+//
+//     sumPrimesUpTo("whatever");
+//     //=> input should be a number
+//
+var sumPrimesUpTo = function () {
+};
+
+
+// Using the `isPrime` function, write a function that takes in a
+// positive integer, n, and returns the first n numbers.
+//
+//     sumOfFirstNPrimes(10);
+//     //=> 129
+//
+//     sumOfFirstNPrimes(100);
+//     //=> 24133
+//
+//     sumOfFirstNPrimes(1000);
+//     //=> 3672913
+//
+//     sumOfFirstNPrimes(0);
+//     //=> 0
+//
+//     sumOfFirstNPrimes(1);
+//     //=> 2
+//
+//     sumOfFirstNPrimes(-10);
+//     //=> input number should be zero or a positive number!
+//
+var sumOfFirstNPrimes = function () {
+};
+
+
+// A _palindrome_ is a string that reads the same forwards and backwards. Write
+// a function that accepts a string of arbitrary letters, numbers, and symbols, and
+// returns true if it's a palindrome. For example:
+//
+//      isPalindrome("kayak");
+//      //=> true
+//
+//      isPalindrome("A man, a plan, a canal, Panama");
+//      //=> true
+//
+//      isPalindrome("hello world");
+//      //=> false
+//
+// Let's start by writing a function to remove all non-letter characters
+// from the input.
+//
+//     removeNonLetters("A man, a plan, a canal, Panama");
+//     //=> AmanaplanacanalPanama
+//
+//     removeNonLetters("this is a string; it has some punctuation!");
+//     //=> thisisastringithassomepunctuation
+//
+var removeNonLetters = function () {
+};
+
+
+// Now use `removeNonLetters`, along with the `reverse` function from above to
+// determine if the string is a palindrome.
+var isPalindrome = function () {
+};
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array Iterators</title>
+    <script>
+    	// Write a function called `isVowel` that returns `true` if the input is a
+// single character and either an upper or lower-case a, e, i, o, or
+// u. It should return false otherwise.
+//
+//    isVowel("a");
+//    //=> true
+//
+//    isVowel("E");
+//    //=> true
+//
+//    isVowel(1);
+//    //=> false
+//
+//    isVowel("Ea");
+//    //=> false
+//
+//    isVowel("Y");
+//    //=> false
+//
+var isVowel = function (n) {
+	var p=n.toLowerCase()
+	if((typeof(p)=="string")&&(p.length==1))
+		{
+			if((p=='a')||(p=='e')||(p=='i')||(p=='o')||(p=='u'))
+			{
+				return true;
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+};
+console.log(isVowel('a'));
+console.log(isVowel('1'));
+console.log(isVowel('b'));
+
+
+
+// Write a function called `isLowerCaseLetter` that returns `true` if
+// the input is a single letter and lower-case. It should return false otherwise.
+//
+//    isLowerCaseLetter("a");
+//    //=> true
+//
+//    isLowerCaseLetter("A");
+//    //=> false
+//
+//    isLowerCaseLetter(1);
+//    //=> false
+//
+//    isLowerCaseLetter("ae");
+//    //=> false
+//
+//    isLowerCaseLetter(true);
+//    //=> false
+//
+var isLowerCaseLetter = function (a) {
+	if(typeof(a)=="string"){
+	var b=a.toLowerCase();
+	if((a.length==1)&&(a==b)&&(typeof(a)=="string"))
+	{
+		return true;
+
+	}
+	else
+		return false;
+}else
+return false;
+};
+console.log(isLowerCaseLetter("a"));
+console.log(isLowerCaseLetter("A"));
+	console.log(isLowerCaseLetter(1));
+	console.log( isLowerCaseLetter("ae"));
+		console.log(isLowerCaseLetter(true));
+
+
+// Write a function called `sumUpTo` so that it accepts a positive number `n`
+// and sums the first `n` positive integers. For example, if you call `sumUpTo(5)`
+// it should sum the numbers 1 through 5 inclusive. It should throw an error if the
+// input number is negative.
+//     sumUpTo(100);
+//     //=> 5050
+//
+//     sumUpTo(10);
+//     //=> 55
+//
+//     sumUpTo(0);
+//     //=> 0
+//
+//     sumUpTo(-10);
+//     //=> input must be a zero or a positive number!
+//
+var sumUpTo = function (n) {
+	var sum=0;
+	if(n>=0){
+		for(var i=1;i<=n;i++)
+		{
+			 sum+=i;
+		}
+		return sum;
+	}
+	else
+		return "input must be a zero or a positive number!";
+};
+console.log(sumUpTo(100));
+console.log(sumUpTo(10));
+console.log(sumUpTo(0));
+console.log(sumUpTo(-10));
+
+
+
+// Write a function called `sumAToB` so that it accepts two parameters
+// `a` and `b` and sums the numbers between `a` and `b` inclusive. Note
+// that `a` may be larger than `b`, in which case you'll need to work
+// backawards.
+//
+//     sumAToB(10, 20);
+//     //=> 165
+//
+//     sumAToB(0, -15);
+//     //=> 120
+//
+//     sumAToB(-10, 500);
+//     //=> 125195
+//
+//     sumAToB(10, 10);
+//     //=> 10
+//     sumAToB("hello", "world");
+//     //=> inputs should be numbers!
+//
+var sumAToB = function (n1,m1) {
+	let n=Math.abs(n1);
+	let m=Math.abs(m1);
+	sum=0;
+	if((typeof(n1)=="number") && (typeof(m1)=="number")){
+		if(n<m)
+		{
+			for(var i=n;i<=m;i++)
+			{
+				sum+=Math.abs(i);
+			}
+			
+		}
+		else
+		{
+		for(var j=m;j>=n;j--)
+			{
+				sum+=Math.abs(j);
+
+			}
+			
+		}
+		return sum;
+		
+	}
+	else
+		return "inputs should be numbers!"
+
+
+};
+console.log(sumAToB(10, 20));
+console.log(sumAToB(0, -15));
+console.log( sumAToB(-10, 500));
+console.log( sumAToB(10, 10));
+console.log(sumAToB("hello", "world"));
+
+
+
+// Write a function called `countVowels` that accepts a string and
+// returns the number of vowels contained in that string. You'll want
+// to use the `isVowel` helper function from above. It should throw an
+// error if the input is not a string
+//
+//     countVowels("hello world!");
+//     //=> 3
+//
+//     countVowels("omg this is a hilarious tweet about nothing");
+//     //=> 16
+//
+//     countVowels("");
+//     //=> 0
+//
+//     countVowels(true);
+//     //=> input to countVowels must be a string!
+//
+var countVowels = function (s) {
+	
+	count=0;
+
+	if(typeof(s)=="string"){
+		var str=s.toLowerCase();
+	for(var i=0;i<str.length;i++){
+		if((str[i]=="a")||(str[i]=="e")||(str[i]=="i")||(str[i]=="o")||(str[i]=="u")){
+			count++;
+
+		}
+	
+}
+return count;
+}
+else
+	return "input to countVowels must be a string!"
+
+};
+console.log(countVowels("hello world!"));
+console.log(countVowels("omg this is a hilarious tweet about nothing"));
+console.log(countVowels(""));
+console.log(countVowels(true));
+
+
+// Write a function that accepts a string and returns the same string, only in
+// reverse!
+//
+//     reverse("hello world!");
+//     //=> !dlrow olleh
+//
+//     reverse("omg this is a hilarious tweet about nothing");
+//     //=> gnihton tuoba teewt suoiralih a si siht gmo
+//
+//     reverse("");
+//     //=>
+//
+//     reverse(true);
+//     //=> input to reverseString must be an string!
+//
+var reverseString = function (str) {
+	if(typeof(str)=="string")
+	{
+	var a=str.split('');
+	return a.reverse().join('');
+}else
+{
+	return "input must be as string";
+}
+
+};
+console.log(reverseString(" priya"));
+
+
+// A number is a prime number if it is only evenly divisible by 1 and itself
+// (although we don't consider 1 a prime number, so 2 is the first prime
+// number). Write a function called `isPrime` that accepts a number `p` as an
+// argument and returns `true` if it is prime, `false` otherwise.
+//
+//     isPrime(101);
+//     //=> true
+//
+//     isPrime(13);
+//     //=> true
+//
+//     isPrime(1);
+//     //=> false
+//
+//     isPrime(2);
+//     //=> true
+//
+//     isPrime("hello");
+//     //=> false
+//
+//     isPrime(-101);
+//     //=> false
+//
+var isPrime = function (p) {
+	if((p>0)&&(typeof(p)=="number")){
+		var count=0;
+	for(var i=1;i<=p;i++){
+		
+		if(p%i==0)
+		{
+			count++;
+		}
+	}
+	if(count==2)
+	{
+		return true;
+	}
+	else
+		return false;
+}else
+return false;
+
+};console.log(isPrime(101));
+
+console.log(isPrime(10));
+console.log(isPrime("hello"));
+
+// Using the `isPrime` function, write a function that accepts a number as
+// input sums all the primes smaller than that number.
+//
+//     sumPrimesUpTo(100);
+//     //=> 1060
+//
+//     sumPrimesUpTo(0);
+//     //=> 0
+//
+//     sumPrimesUpTo(1000);
+//     //=> 76127
+//
+//     sumPrimesUpTo(2);
+//     //=> 2
+//
+//     sumPrimesUpTo("whatever");
+//     //=> input should be a number
+//
+var sumPrimesUpTo = function (num) {
+	var sum=0;
+	
+	if((num>0)&&(typeof(num)=="number"))
+	{
+		for(var i=1;i<num;i++)
+		{ var c=0;
+			if(num%i==0)
+			{
+				c++;
+			}
+			if(c==2)
+			{
+				sum=sum+i;
+			}
+		} 
+		return sum;
+
+	}
+	else
+		return false;
+};console.log(sumPrimesUpTo(100));
+console.log(sumPrimesUpTo(0));
+
+
+// Using the `isPrime` function, write a function that takes in a
+// positive integer, n, and returns the first n numbers.
+//
+//     sumOfFirstNPrimes(10);
+//     //=> 129
+//
+//     sumOfFirstNPrimes(100);
+//     //=> 24133
+//
+//     sumOfFirstNPrimes(1000);
+//     //=> 3672913
+//
+//     sumOfFirstNPrimes(0);
+//     //=> 0
+//
+//     sumOfFirstNPrimes(1);
+//     //=> 2
+//
+//     sumOfFirstNPrimes(-10);
+//     //=> input number should be zero or a positive number!
+//
+var sumOfFirstNPrimes = function () {
+};
+
+
+// A _palindrome_ is a string that reads the same forwards and backwards. Write
+// a function that accepts a string of arbitrary letters, numbers, and symbols, and
+// returns true if it's a palindrome. For example:
+//
+//      isPalindrome("kayak");
+//      //=> true
+//
+//      isPalindrome("A man, a plan, a canal, Panama");
+//      //=> true
+//
+//      isPalindrome("hello world");
+//      //=> false
+//
+// Let's start by writing a function to remove all non-letter characters
+// from the input.
+//
+//     removeNonLetters("A man, a plan, a canal, Panama");
+//     //=> AmanaplanacanalPanama
+//
+//     removeNonLetters("this is a string; it has some punctuation!");
+//     //=> thisisastringithassomepunctuation
+//
+var removeNonLetters = function () {
+};
+
+
+// Now use `removeNonLetters`, along with the `reverse` function from above to
+// determine if the string is a palindrome.
+var isPalindrome = function () {
+};
+
+    </script>
+</head>
+<body>
+  <h1>Loops Practice</h1>
+</body>
+</html>
+
+
+
+testsss:
+
+describe("#isVowel", function () {
+    it ("should return true if the argument is a vowel, false otherwise", function () {
+        expect(isVowel("a")).toBe(true);
+        expect(isVowel("E")).toBe(true);
+        expect(isVowel(1)).toBe(false);
+        expect(isVowel("Ea")).toBe(false);
+        expect(isVowel("Y")).toBe(false);
+    });
+});
+
+describe("#isLowerCaseLetter", function () {
+    it ("should return true if the argument is a lower-case letter, false otherwise", function () {
+        expect(isLowerCaseLetter("a")).toBe(true);
+        expect(isLowerCaseLetter("A")).toBe(false);
+        expect(isLowerCaseLetter(1)).toBe(false);
+        expect(isLowerCaseLetter("ae")).toBe(false);
+        expect(isLowerCaseLetter(true)).toBe(false);
+    });
+});
+
+describe("#sumUpTo", function () {
+    it ("should return the sum from zero to the input argument", function () {
+        expect(sumUpTo(100)).toEqual(5050);
+        expect(sumUpTo(10)).toEqual(55);
+        expect(sumUpTo(0)).toEqual(0);;
+    });
+
+    it ("should throw an error if the input is not a number or is negative", function () {
+        expect(function () {
+            sumUpTo(-10);
+        }).toThrow();
+    });
+});
+
+describe("#sumAToB", function () {
+    it ("should sum all of the values between the two input arguments, inclusive", function () {
+        expect(sumAToB(10, 20)).toBe(165);
+        expect(sumAToB(0, -15)).toBe(-120);
+        expect(sumAToB(-10, 500)).toBe(125195);
+        expect(sumAToB(10, 10)).toBe(10);
+    });
+
+    it ("should throw an error if the either of the inputs are not numbers", function () {
+        expect(function () {
+            sumAToB("hello", "world");
+        }).toThrow();
+    });
+});
+
+describe("#countVowels", function () {
+    it ("should return the number of vowels in a string", function () {
+        expect(countVowels("hello world!")).toBe(3);
+        expect(countVowels("omg this is a hilarious tweet about nothing")).toBe(16);
+        expect(countVowels("")).toBe(0);
+    });
+
+    it ("should throw an error if the input is not a string", function () {
+        expect(function () {
+            countVowels(true);
+        }).toThrow();
+    });
+});
+
+describe("#reverseString", function () {
+    it ("should return a new string that is equal to the input string in reverse", function () {
+        expect(reverseString("hello world!")).toEqual("!dlrow olleh");
+        expect(reverseString("omg this is a hilarious tweet about nothing")).toEqual("gnihton tuoba teewt suoiralih a si siht gmo");
+        expect(reverseString("")).toEqual("");
+    });
+
+
+    it ("should throw an error if the input is not a string", function () {
+        expect(function () {
+            reverseString(true);
+        }).toThrow();
+    });
+});
+
+describe("#isPrime", function () {
+    it ("should return true if the input is a prime number, false otherwise", function () {
+        expect(isPrime(101)).toBe(true);
+        expect(isPrime(13)).toBe(true);
+        expect(isPrime(1)).toBe(false);
+        expect(isPrime(0)).toBe(false);
+        expect(isPrime(2)).toBe(true);
+        expect(isPrime("hello")).toBe(false);
+        expect(isPrime(-101)).toBe(false);
+    });
+});
+
+describe("#sumPrimesUpTo", function () {
+    it ("should return the sum of all the primes up to and including the input number", function () {
+        expect(sumPrimesUpTo(100)).toBe(1060);
+        expect(sumPrimesUpTo(0)).toBe(0);
+        expect(sumPrimesUpTo(1000)).toBe(76127);
+        expect(sumPrimesUpTo(2)).toBe(2);
+    });
+
+    it ("should throw an error if the input is not a number", function () {
+        expect(function () {
+            sumPrimesUpTo("whatever");
+        }).toThrow();
+    });
+});
+
+describe("#sumOfFirstNPrimes", function () {
+    it ("should return the sum of the first n primes", function () {
+        expect(sumOfFirstNPrimes(10)).toBe(129);
+        expect(sumOfFirstNPrimes(100)).toBe(24133);
+        expect(sumOfFirstNPrimes(1000)).toBe(3682913);
+        expect(sumOfFirstNPrimes(0)).toBe(0);
+        expect(sumOfFirstNPrimes(1)).toBe(2);
+    });
+
+    it ("should throw an error if the input is not a positive number or zero", function () {
+        expect(function () {
+            sumOfFirstNPrimes(-10);
+        }).toThrow();
+    });
+});
+
+describe("#removeNonLetters", function () {
+    it ("should remove non-letters from the input string", function () {
+        expect(removeNonLetters("A man, a plan, a canal, Panama")).toEqual("AmanaplanacanalPanama");
+        expect(removeNonLetters("this is a string; it has some punctuation!")).toEqual("thisisastringithassomepunctuation");
+    });
+
+    it ("should throw an error if the input is not a string", function () {
+        expect(function () {
+            removeNonLetters(true);
+        }).toThrow();
+    });
+});
+
+describe("#isPalindrome", function () {
+    it ("should return true if the non-punctuated input string is a palindrome, false otherwise", function () {
+        expect(isPalindrome("kayak")).toBe(true);
+        expect(isPalindrome("A man, a plan, a canal, Panama")).toBe(true);
+        expect(isPalindrome("hello world")).toBe(false);
+        expect(isPalindrome(5)).toBe(false);
+    });
+});
+
+
+
+runnersa:
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="../jasmine/lib/jasmine-1.3.1/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="../jasmine/lib/jasmine-1.3.1/jasmine.css">
+  <script type="text/javascript" src="../jasmine/lib/jasmine-1.3.1/jasmine.js"></script>
+  <script type="text/javascript" src="../jasmine/lib/jasmine-1.3.1/jasmine-html.js"></script>
+
+  <!-- include source files here... -->
+  <script type="text/javascript" src="practice.js"></script>
+
+  <!-- include spec files here... -->
+  <script type="text/javascript" src="tests.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var htmlReporter = new jasmine.HtmlReporter();
+
+      jasmineEnv.addReporter(htmlReporter);
+
+      jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+      };
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>
+
